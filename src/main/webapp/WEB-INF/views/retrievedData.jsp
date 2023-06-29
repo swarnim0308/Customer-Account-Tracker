@@ -31,7 +31,7 @@ href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 				</tr>
 		</table>
 		<br>
-<a href="/bank/" class="btn btn-primary">Back to Home Page</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="/contextpath/bank/" class="btn btn-primary">Back to Home Page</a>&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 </body>
 </html>

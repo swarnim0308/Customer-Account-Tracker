@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Sw20202896CustacctrackerApplicationTests {
+class CustacctrackerApplicationTests {
 
 	@Test
 	void contextLoads() {
