@@ -1,4 +1,4 @@
-package com.bank.CUSTACCTRACKER.service;
+package com.bank.custaccttracker.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bank.CUSTACCTRACKER.bean.Customer;
-import com.bank.CUSTACCTRACKER.dao.CustomerDao;
-import com.bank.CUSTACCTRACKER.error.CustomerNotFoundException;
+import com.bank.custaccttracker.bean.Customer;
+import com.bank.custaccttracker.dao.CustomerDao;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -24,10 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Customer findById(Integer id) {
         Optional<Customer> customer = dao.findById(id);
-        if(!customer.isPresent()) {
-            return null;
-        }
-        return  customer.get();
+		return customer.orElse(null);
 	}
 
 	@Override
@@ -43,8 +39,8 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<Customer> findAll() {
-		List<Customer> l=new ArrayList<Customer>();
-		dao.findAll().forEach(cust->l.add(cust));
+		ArrayList<Customer> l;
+		l = new ArrayList<>(dao.findAll());
 		return l;
 	}
 

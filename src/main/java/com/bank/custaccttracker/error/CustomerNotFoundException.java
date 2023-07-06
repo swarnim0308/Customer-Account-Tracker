@@ -1,4 +1,4 @@
-package com.bank.CUSTACCTRACKER.error;
+package com.bank.custaccttracker.error;
 
 public class CustomerNotFoundException extends Exception{
 

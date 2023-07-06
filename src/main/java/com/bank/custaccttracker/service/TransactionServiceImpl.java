@@ -1,12 +1,12 @@
-package com.bank.CUSTACCTRACKER.service;
+package com.bank.custaccttracker.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bank.CUSTACCTRACKER.bean.Customer;
-import com.bank.CUSTACCTRACKER.bean.Transactions;
-import com.bank.CUSTACCTRACKER.dao.CustomerDao;
-import com.bank.CUSTACCTRACKER.dao.TransactionDao;
+import com.bank.custaccttracker.bean.Customer;
+import com.bank.custaccttracker.bean.Transactions;
+import com.bank.custaccttracker.dao.CustomerDao;
+import com.bank.custaccttracker.dao.TransactionDao;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -20,8 +20,10 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public String sendMoney(int fromId, int toId, int amount) {
 		// TODO Auto-generated method stub
-		Customer c1=dao.findById(fromId).get();
-		Customer c2=dao.findById(toId).get();
+		boolean c1flag =dao.findById(fromId).isPresent();
+		Customer c1 = c1flag ? dao.findById(fromId).get():null;
+		boolean c2flag =dao.findById(toId).isPresent();
+		Customer c2 = c2flag ? dao.findById(toId).get():null;
 		Transactions t=new Transactions();
 		if(c1.getCustBalance()>=amount)
 		{

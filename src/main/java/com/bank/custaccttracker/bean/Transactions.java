@@ -1,4 +1,4 @@
-package com.bank.CUSTACCTRACKER.bean;
+package com.bank.custaccttracker.bean;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
