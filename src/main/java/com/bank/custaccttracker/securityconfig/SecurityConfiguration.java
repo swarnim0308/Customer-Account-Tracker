@@ -3,36 +3,54 @@ package com.bank.custaccttracker.securityconfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
-@SuppressWarnings("deprecation")
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+public class SecurityConfiguration {
 
-	@Value("${spring.security.user.name}")
-	String username;
+	@Value("${spring.security.user.name:admin}")
+	private String username;
 
-	@Value("${spring.security.user.password}")
-	String password;
+	@Value("${spring.security.user.password:changeme}")
+	private String password;
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser(username).password(password).roles("Developer");
-	}
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http
+			.csrf(csrf -> csrf.disable())
+			.authorizeHttpRequests(authz -> authz
+				.requestMatchers("/h2-console/**").permitAll()  // Let H2 console through (for dev only)
+				.requestMatchers("/error").permitAll()
+				.anyRequest().authenticated()
+			)
+			.httpBasic(basic -> basic.realmName("Banking Application"))
+			.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));  // Allow H2 console frames
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable();
-		http.authorizeRequests().anyRequest().fullyAuthenticated().and().httpBasic();
+		return http.build();
 	}
 
 	@Bean
-	public static NoOpPasswordEncoder encoder() {
-		return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+	public UserDetailsService userDetailsService() {
+		UserDetails user = User.withUsername(username)
+			.password(passwordEncoder().encode(password))
+			.roles("Developer", "User")
+			.build();
 
+		return new InMemoryUserDetailsManager(user);
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 }
