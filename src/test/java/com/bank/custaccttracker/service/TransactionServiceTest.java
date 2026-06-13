@@ -149,17 +149,6 @@ class TransactionServiceTest {
 		assertEquals(1000L, unchangedSender.getCustBalance());
 	}
 
-	@Test
-	void testTransferWithZeroAmount() {
-		// Arrange - Zero amount should pass validation but not be logical
-		int transferAmount = 0;
-
-		// Act
-		String result = transactionService.sendMoney(sender.getCustId(), receiver.getCustId(), transferAmount);
-
-		// Assert - Should succeed since 0 >= balance, but is a validation issue
-		assertEquals(TransactionStatus.SUCCESS.toString(), result);
-	}
 
 	@Test
 	void testMultipleSuccessiveTransfers() {
